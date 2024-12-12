@@ -4,21 +4,32 @@ let currentDate = new Date().toLocaleDateString('en-CA'); // Today's Date in 'YY
 let menuData = {}; // To store fetched menu data
 
 // Function to fetch menu data from JSON
+// ... (rest of your code)
+
 async function fetchMenu() {
     try {
         const response = await fetch(`menu.json?t=${new Date().getTime()}`);
         menuData = await response.json();
 
+        // Ensure menuData is an object and has the desired structure
+        if (typeof menuData !== 'object' || !menuData[currentMess]) {
+            console.error('Invalid JSON format or missing menu data');
+            return;
+        }
+
         // Check if today's menu exists; if not, default to the first available date
         if (!menuData[currentMess][currentDate]) {
-            alert("No menu available for today's date. Defaulting to the first date in the JSON.");
+            alert("No menu available for today's date. Defaulting to the first available date.");
             currentDate = Object.keys(menuData[currentMess])[0];
         }
+
         updateMenuDisplay();
     } catch (error) {
         console.error("Error fetching menu data:", error);
     }
 }
+
+// ... (rest of your code)
 
 // Function to update menu display
 function updateMenuDisplay() {
